@@ -15,7 +15,25 @@ A Flutter app that fetches and displays a list of articles from a public API.
 - Pull to refresh for latest data  
 - Responsive UI for all screen sizes  
 
----  ## Setup Instructions  1. **Clone the repo:**     ```bash    git clone https://github.com/Bhaveshupadhyay/bharat_nxt.git    cd bharat_nxt/flutter_app    ``` 2. **Install dependencies:**     ```bash    flutter pub get    ``` 3. **Run the app:**     ```bash    flutter run    ```  ---
+ ## Setup Instructions  
+ 1. Clone the repo:
+```bash 
+git clone https://github.com/Bhaveshupadhyay/bharat_nxt.git
+cd flutter bharat_nxt
+```
+2. Install dependencies:
+```bash 
+flutter pub get
+```
+3. Run the app:
+```bash 
+flutter run
+```
+## Tech Stack
+- Flutter SDK:  3.27.3
+- State Management: Bloc
+- HTTP Client: dio
+- Persistence: shared_preferences
 
 ## Libraries Used
 
