@@ -1,6 +1,7 @@
 ## App screenshots and Screen recording
 
 https://drive.google.com/drive/folders/13Wo7ahZ12iaA0dbgmPi78sOZgRjowcCO?usp=share_link
+
 ![bharatnxt](https://github.com/user-attachments/assets/47128bb1-53f5-4532-91cf-ac94c034f77c)
 
 ## Bharat NXT - Flutter Article App
