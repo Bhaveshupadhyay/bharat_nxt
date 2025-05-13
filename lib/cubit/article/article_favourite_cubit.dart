@@ -11,7 +11,10 @@ class ArticleFavouriteCubit extends Cubit<bool>{
 
   Future<void> checkIsFavourite({required int id}) async {
     final articles= await _loadsFavouritesFromPrefs();
-    emit(articles.containsKey(id.toString()));
+    print('$id : ${articles.containsKey(id.toString())}');
+    if(!isClosed) {
+      emit(articles.containsKey(id.toString()));
+    }
   }
 
   Future<void> favourite({required bool isMarkedFavourite,required ArticlesModel articlesModel})async {
@@ -45,4 +48,6 @@ class ArticleFavouriteCubit extends Cubit<bool>{
     final articles= json!=null? jsonDecode(json) as Map<String,dynamic> : <String,dynamic>{};
     return articles;
   }
+
+
 }

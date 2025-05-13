@@ -1,6 +1,7 @@
 import 'package:bharat_nxt/core/theme/app_theme.dart';
 import 'package:bharat_nxt/cubit/article/article_cubit.dart';
-import 'package:bharat_nxt/cubit/article/article_favourite_cubit.dart';
+import 'package:bharat_nxt/cubit/navigation/bottom_navigation_cubit.dart';
+import 'package:bharat_nxt/screens/favourites.dart';
 import 'package:bharat_nxt/screens/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,22 +29,64 @@ class MyApp extends StatelessWidget {
           home: child,
         );
       },
+      // child: MyHomePage(),
       child: MultiBlocProvider(
         providers: [
           BlocProvider(create: (create)=>ArticleCubit()..loadArticles()),
-          // BlocProvider(create: (create)=>ArticleFavouriteCubit()),
+          BlocProvider(create: (create)=>BottomNavigationCubit()),
         ],
-        child: const Home(),
+        child: const MyHomePage(),
       ),
     );
   }
 }
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key,});
 
   @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  final items=[Home(),Favourites()];
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      body: BlocBuilder<BottomNavigationCubit,int>(
+        builder: (context,currentIndex){
+          return items[currentIndex];
+        }
+      ),
+      bottomNavigationBar: BlocConsumer<BottomNavigationCubit,int>(
+        builder: (context,currentIndex){
+          return BottomNavigationBar(
+            currentIndex: currentIndex,
+            onTap: (index){
+              context.read<BottomNavigationCubit>().changeIndex(index);
+            },
+            items: [
+              BottomNavigationBarItem(
+                icon:  Icon(Icons.home,),
+                label: 'Home',
+              ),
+              BottomNavigationBarItem(
+                icon:  Icon(Icons.favorite,),
+                label: 'Favourite',
+              ),
+            ],
+          );
+        },
+        listener: (context,currentIndex) {
+          if(currentIndex==0){
+            context.read<ArticleCubit>().showAllArticles();
+          }
+          else if(currentIndex==1){
+            context.read<ArticleCubit>().loadFavouriteArticles();
+          }
+        },
+      ),
+    );
   }
 }

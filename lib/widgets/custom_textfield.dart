@@ -48,6 +48,9 @@ class CustomTextField extends StatelessWidget {
                 onTap: onTap,
                 controller: textEditingController,
                 readOnly: isReadOnly??false,
+                onTapOutside: (event) {
+                  FocusManager.instance.primaryFocus?.unfocus();
+                },
                 keyboardType: keyboardType,
                 inputFormatters: inputFormatters,
                 decoration: InputDecoration(

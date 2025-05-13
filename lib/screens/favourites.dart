@@ -1,24 +1,23 @@
-import 'package:bharat_nxt/core/common/state/data_state.dart';
-import 'package:bharat_nxt/core/theme/app_colors.dart';
-import 'package:bharat_nxt/cubit/article/article_cubit.dart';
-import 'package:bharat_nxt/cubit/navigation/bottom_navigation_cubit.dart';
-import 'package:bharat_nxt/models/articles_model.dart';
-import 'package:bharat_nxt/widgets/article_card.dart';
-import 'package:bharat_nxt/widgets/custom_textfield.dart';
-import 'package:bharat_nxt/widgets/loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class Home extends StatefulWidget {
-  const Home({super.key});
+import '../core/common/state/data_state.dart';
+import '../cubit/article/article_cubit.dart';
+import '../models/articles_model.dart';
+import '../widgets/article_card.dart';
+import '../widgets/custom_textfield.dart';
+import '../widgets/loader.dart';
+
+class Favourites extends StatefulWidget {
+  const Favourites({super.key});
 
   @override
-  State<Home> createState() => _HomeState();
+  State<Favourites> createState() => _FavouritesState();
 }
 
-class _HomeState extends State<Home> {
+class _FavouritesState extends State<Favourites> {
   final TextEditingController _searchController= TextEditingController();
   final ScrollController _scrollController = ScrollController();
   bool _isSearchBarVisible = true;
@@ -51,7 +50,7 @@ class _HomeState extends State<Home> {
       bottom: false,
       child: RefreshIndicator(
         onRefresh: () async {
-          await context.read<ArticleCubit>().loadArticles();
+          await context.read<ArticleCubit>().loadFavouriteArticles();
         },
         child: Column(
           children: [
@@ -106,7 +105,6 @@ class _HomeState extends State<Home> {
       ),
     );
   }
-
   @override
   void dispose() {
     _searchController.dispose();

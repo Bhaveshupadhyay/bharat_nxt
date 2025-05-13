@@ -1,7 +1,12 @@
+import 'dart:convert';
+
 import 'package:bharat_nxt/core/common/state/data_state.dart';
 import 'package:bharat_nxt/models/articles_model.dart';
 import 'package:bharat_nxt/services/api.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../core/constant/keys.dart';
 
 class ArticleCubit extends Cubit<DataState>{
 
@@ -37,5 +42,21 @@ class ArticleCubit extends Cubit<DataState>{
     }
   }
 
+  void showAllArticles(){
+    emit(DataLoaded<List<ArticlesModel>>(data: _articles??[]));
+  }
+
+  Future<void> loadFavouriteArticles() async {
+    final articles= await _loadsFavouritesFromPrefs();
+    final list= articles.entries.map((entry)=> ArticlesModel.fromJson(jsonDecode(entry.value))).toList();
+    emit(DataLoaded<List<ArticlesModel>>(data: list));
+  }
+
+  Future<Map<String,dynamic>> _loadsFavouritesFromPrefs() async {
+    final prefs= await SharedPreferences.getInstance();
+    final json= prefs.getString(Keys.favouriteArticles);
+    final articles= json!=null? jsonDecode(json) as Map<String,dynamic> : <String,dynamic>{};
+    return articles;
+  }
 
 }
