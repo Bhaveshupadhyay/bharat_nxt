@@ -47,9 +47,9 @@ class ArticleCubit extends Cubit<DataState>{
   }
 
   Future<void> loadFavouriteArticles() async {
-    final articles= await _loadsFavouritesFromPrefs();
-    final list= articles.entries.map((entry)=> ArticlesModel.fromJson(jsonDecode(entry.value))).toList();
-    emit(DataLoaded<List<ArticlesModel>>(data: list));
+    final articlesJson= await _loadsFavouritesFromPrefs();
+    _articles= articlesJson.entries.map((entry)=> ArticlesModel.fromJson(jsonDecode(entry.value))).toList();
+    emit(DataLoaded<List<ArticlesModel>>(data: _articles??[]));
   }
 
   Future<Map<String,dynamic>> _loadsFavouritesFromPrefs() async {

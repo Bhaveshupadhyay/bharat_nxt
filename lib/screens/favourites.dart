@@ -46,61 +46,64 @@ class _FavouritesState extends State<Favourites> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      bottom: false,
-      child: RefreshIndicator(
-        onRefresh: () async {
-          await context.read<ArticleCubit>().loadFavouriteArticles();
-        },
-        child: Column(
-          children: [
-            AnimatedContainer(
-              duration: Duration(milliseconds: 300),
-              height: _isSearchBarVisible ? 70.h : 0,
-              child: AnimatedOpacity(
-                opacity: _isSearchBarVisible ? 1.0 : 0.0,
-                duration: Duration(milliseconds: 200),
-                child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: _isSearchBarVisible? 10.h:0, horizontal: 20.w,),
-                  child: CustomTextField(
-                    hintText: 'Search articles...',
-                    textEditingController: _searchController,
-                    keyboardType: TextInputType.text,
-                    onTextChanged: (text){
-                      context.read<ArticleCubit>().search(text);
-                    },
-                    prefixIcon: Icon(Icons.search,size: 20.sp,),
+    return BlocProvider(
+      create: (create)=>ArticleCubit()..loadFavouriteArticles(),
+      child: SafeArea(
+        bottom: false,
+        child: RefreshIndicator(
+          onRefresh: () async {
+            await context.read<ArticleCubit>().loadFavouriteArticles();
+          },
+          child: Column(
+            children: [
+              AnimatedContainer(
+                duration: Duration(milliseconds: 300),
+                height: _isSearchBarVisible ? 70.h : 0,
+                child: AnimatedOpacity(
+                  opacity: _isSearchBarVisible ? 1.0 : 0.0,
+                  duration: Duration(milliseconds: 200),
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: _isSearchBarVisible? 10.h:0, horizontal: 20.w,),
+                    child: CustomTextField(
+                      hintText: 'Search articles...',
+                      textEditingController: _searchController,
+                      keyboardType: TextInputType.text,
+                      onTextChanged: (text){
+                        context.read<ArticleCubit>().search(text);
+                      },
+                      prefixIcon: Icon(Icons.search,size: 20.sp,),
+                    ),
                   ),
                 ),
               ),
-            ),
-            Expanded(
-              child: BlocBuilder<ArticleCubit,DataState>(
-                builder: (BuildContext context, DataState state) {
-                  if(state is DataLoaded<List<ArticlesModel>>){
-                    return ListView.builder(
-                        controller: _scrollController,
-                        itemCount: state.data.length,
-                        itemBuilder: (context,index){
-                          return ArticleCard(article: state.data[index]);
-                        }
-                    );
-                  }
-                  else if (state is DataLoading){
-                    return Center(child: Loader());
-                  }
-                  else if(state is DataLoadFailed){
-                    return Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20.w),
-                      child: Center(child: Text(state.failure.msg??'',style: Theme.of(context).textTheme.titleSmall,),),
-                    );
-                  }
-                  return SizedBox.shrink();
-                },
+              Expanded(
+                child: BlocBuilder<ArticleCubit,DataState>(
+                  builder: (BuildContext context, DataState state) {
+                    if(state is DataLoaded<List<ArticlesModel>>){
+                      return ListView.builder(
+                          controller: _scrollController,
+                          itemCount: state.data.length,
+                          itemBuilder: (context,index){
+                            return ArticleCard(article: state.data[index]);
+                          }
+                      );
+                    }
+                    else if (state is DataLoading){
+                      return Center(child: Loader());
+                    }
+                    else if(state is DataLoadFailed){
+                      return Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 20.w),
+                        child: Center(child: Text(state.failure.msg??'',style: Theme.of(context).textTheme.titleSmall,),),
+                      );
+                    }
+                    return SizedBox.shrink();
+                  },
 
-              ),
-            )
-          ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
